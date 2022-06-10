@@ -106,7 +106,13 @@ void loop()
       delay(200);
       digitalWrite(dir, LOW);
     }
+    else if(leitura == '3') {
+      digitalWrite(launch, HIGH);
+      delay(200);
+      digitalWrite(launch, LOW);
+    }
     lePin();
+    lancaBolinha();
   }else{
     lancaBolinha();
     leBtnManualMode();
