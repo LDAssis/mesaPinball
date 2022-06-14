@@ -10,7 +10,7 @@ kernel = numpy.ones((5 ,5), numpy.uint8)
 
 captura = cv2.VideoCapture(0)
 
-arduino = serial.Serial('COM3', 9600)
+arduino = serial.Serial('COM6', 9600)
 
 posX = []
 posY = []
@@ -27,8 +27,18 @@ class hitBox:
     w = 0
     h = 0
 
+class lancadorBase:
+    x = 0
+    y = 0
+    x2 = 0
+    y2 = 0
+    w = 0
+    h = 0
 
 hb = hitBox()
+lb = lancadorBase()
+
+delaylancamento = False
 
 
 #Pega 1 frame da camera
@@ -49,10 +59,6 @@ def calcFrame():
     fps = str(fps) 
     return fps
 
-
-def filtraImagem(image):
-    image = cv2.bilateralFilter(image, 5,8,8)
-    return image
 
 def drawRoute(image):
     global posX
@@ -109,7 +115,7 @@ def predictnextPos(image):
        
 def findBase(image):
     global hb
-    rangomax = numpy.array([40, 40, 255]) # B, G, R
+    rangomax = numpy.array([60, 60, 255]) # B, G, R
     rangomin = numpy.array([0, 0, 100])
     mask = cv2.inRange(image, rangomin, rangomax)
     # reduce the noise
@@ -130,6 +136,26 @@ def findBase(image):
     
     cv2.rectangle(image, (int(meio), hb.y), (int(meio), hb.y2), (0, 255, 0), 1)
     cv2.rectangle(image, (hb.x, hb.y), (hb.x2, hb.y2), (0, 255, 0), 1)
+    
+    return image
+
+def findLancador(image):
+    global lb
+    rangomax = numpy.array([255, 60, 60]) # B, G, R
+    rangomin = numpy.array([60, 0, 0])
+    mask = cv2.inRange(image, rangomin, rangomax)
+    # reduce the noise
+    opening = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+    x, y, w, h = cv2.boundingRect(opening)
+    
+    lb.x = x+15
+    lb.y = y
+    lb.x2 = x+w+40
+    lb.y2 = y+h+30
+    lb.w = w+40
+    lb.h = h+30
+    
+    cv2.rectangle(image, (lb.x, lb.y), (lb.x2, lb.y2), (0, 255, 0), 1)
     
     return image
     
@@ -157,14 +183,27 @@ def hit():
                 return 1
     except:
         pass
+    
+def lancar():
+    global lb
+    try:
+        xB = predictedPosX
+        yB = predictedPosY
+        if(xB > lb.x and yB > lb.y and xB < lb.x2 and yB < lb.y2):
+            print("Lancar")
+            arduino.write('3'.encode())
+            posX[0] = 0
+            posY[0] = 0
+            return 0
+    except:
+        pass
 
 while(True):
     image = getImage()
     fps = calcFrame()
     font = cv2.FONT_HERSHEY_SIMPLEX
-    #image = filtraImagem(image)
-    image = findBase(image)
     x, y, r = detectCircle(image)
+    
     
     if(r > 12):
         if(len(posX) >= 10):
@@ -177,13 +216,14 @@ while(True):
     
     
     findBase(image)
+    findLancador(image)
     drawRoute(image)
     predictnextPos(image)
     result = hit()
+    lancar()
     
     if result==0:
         cv2.putText(image, 'Direito', (0, 70), font, 1, (100, 255, 0), 2, cv2.LINE_AA)
-        print('AAAA')
     if result==1:
         cv2.putText(image, 'Esquerdo', (0, 70), font, 1, (100, 255, 0), 2, cv2.LINE_AA)
     
