@@ -51,9 +51,9 @@ void setup()
   pinMode(esq, OUTPUT);
   pinMode(dir, OUTPUT);
   pinMode(launch, OUTPUT);
-  digitalWrite(esq, LOW);
-  digitalWrite(dir, LOW);
-  digitalWrite(launch, LOW);
+  digitalWrite(esq, HIGH);
+  digitalWrite(dir, HIGH);
+  digitalWrite(launch, HIGH);
 
 
   // Definindo todos pinos como output
@@ -83,11 +83,13 @@ void setup()
 // loop até que seu Arduino seja desligado
 void loop()
 {
+  char leitura = Serial.read();
   Time = millis();
 
   leBtnMode();
 
   if (isFirstLoop) {
+    reset();
     animStart();
     for (int i = 0; i < 20; i++) {
       animStart2();
@@ -95,21 +97,20 @@ void loop()
   }
 
   if (gameMode == 0) {
-    char leitura = Serial.read();
     if (leitura == '1') {
-      digitalWrite(esq, HIGH);
-      delay(200);
       digitalWrite(esq, LOW);
+      delay(200);
+      digitalWrite(esq, HIGH);
     }
     else if (leitura == '2') {
-      digitalWrite(dir, HIGH);
-      delay(200);
       digitalWrite(dir, LOW);
+      delay(200);
+      digitalWrite(dir, HIGH);
     }
     else if(leitura == '3') {
-      digitalWrite(launch, HIGH);
-      delay(200);
       digitalWrite(launch, LOW);
+      delay(200);
+      digitalWrite(launch, HIGH);
     }
     lePin();
     lancaBolinha();
@@ -123,25 +124,35 @@ void loop()
   isFirstLoop = false;
 }
 
+void reset(){
+  digitalWrite(esq, HIGH);
+  digitalWrite(dir, HIGH);
+  digitalWrite(launch, HIGH);
+  controlaEstados[0] = 0;
+  controlaEstados[1] = 0;
+  controlaEstados[2] = 0;
+  controlaEstados[3] = 0;
+}
+
 void leBtnManualMode(){
   if (digitalRead(commandBtns[0]) == LOW){
-    digitalWrite(dir, HIGH);
-  }else{
     digitalWrite(dir, LOW);
+  }else{
+    digitalWrite(dir, HIGH);
   }
   
   if (digitalRead(commandBtns[1]) == LOW){
-    digitalWrite(esq, HIGH);
-  }else{
     digitalWrite(esq, LOW);
+  }else{
+    digitalWrite(esq, HIGH);
   }
 }
 
 void lancaBolinha(){
   if (digitalRead(commandBtns[2]) == LOW){
-    digitalWrite(launch, HIGH);
-  }else{
     digitalWrite(launch, LOW);
+  }else{
+    digitalWrite(launch, HIGH);
   }
 }
 
@@ -149,6 +160,7 @@ void lancaBolinha(){
 
 void leBtnMode() {
   if (digitalRead(commandBtns[0]) == LOW && digitalRead(commandBtns[1]) == LOW) {
+    
     if (TimeOld == 0) {
       TimeOld = Time;
     } else {
@@ -271,6 +283,7 @@ void atualizaLeds() {
 void animStart() {
 
   for (int i = 0; i < 5; i++) {
+    leBtnManualMode();
     int v1 = random(100);
     int v2 = random(100);
     int v3 = random(100);
@@ -315,6 +328,7 @@ void animStart2() {
 
 
   for (int i = 1; i < 9; i++) {
+    leBtnManualMode();
     int v1 = random(100);
     int v2 = random(100);
     int v3 = random(100);
