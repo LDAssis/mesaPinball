@@ -23,7 +23,7 @@ As mesas são espelhadas e identicas, todos os conectores e comandos serão igua
 <p align="center">
   <img src="https://raw.githubusercontent.com/LDAssis/mesaPinball/main/mapa%20pinball.png?token=GHSAT0AAAAAABVP5YK7H7AVIVDSEGXDQJRGYVTLEJQ" width="600" />
 </p>
-
+As solenoides estão ligadas a um módulo relé que está sendo controlado pelo arduino
 ### Pc:
 O PC será responsavel por controlar as mesas e utilizará comunicação serial para conversar com os arduinos.
 
