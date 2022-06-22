@@ -19,6 +19,11 @@ As mesas foram construidas toda em mdf e seus componentes eletronicos são (cada
 - 1 Fonte de computador 400W+ utilizada para ambas as mesas
 As mesas são espelhadas e identicas, todos os conectores e comandos serão iguais em ambos os lados
 
+### Esquema eletrico/pinos
+<p align="center">
+  <img src="https://raw.githubusercontent.com/LDAssis/mesaPinball/main/mapa%20pinball.png?token=GHSAT0AAAAAABVP5YK7H7AVIVDSEGXDQJRGYVTLEJQ" width="600" />
+</p>
+
 ### Pc:
 O PC será responsavel por controlar as mesas e utilizará comunicação serial para conversar com os arduinos.
 
