@@ -21,7 +21,7 @@ As mesas são espelhadas e identicas, todos os conectores e comandos serão igua
 
 ### Esquema eletrico/pinos
 <p align="center">
-  <img src="https://raw.githubusercontent.com/LDAssis/mesaPinball/main/mapa%20pinball.png?token=GHSAT0AAAAAABVP5YK756XBRE45QMK7CXOOYVTLMYQ" width="600" />
+  <img src="https://raw.githubusercontent.com/LDAssis/mesaPinball/main/mapa%20pinball.png?token=GHSAT0AAAAAABVP5YK643AYQ3E3LZCQ6FAUYVUS5GQ" width="600" />
 </p>
 As solenoides estão ligadas a um módulo relé que está sendo controlado pelo arduino
 
