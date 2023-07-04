@@ -8,9 +8,9 @@ new_frame_time = 0
 kernel = numpy.ones((5 ,5), numpy.uint8)
 
 
-captura = cv2.VideoCapture(0)
+captura = cv2.VideoCapture(1)
 
-arduino = serial.Serial('COM6', 9600)
+arduino = serial.Serial('COM5', 9600)
 
 posX = []
 posY = []
@@ -75,8 +75,8 @@ def detectCircle(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) 
     gray_blurred = cv2.blur(gray, (3, 3)) 
     detected_circles = cv2.HoughCircles(gray_blurred,  
-                       cv2.HOUGH_GRADIENT, 1, 20, param1 = 50, 
-                   param2 = 30, minRadius = 13, maxRadius = 23) 
+                       cv2.HOUGH_GRADIENT, 1, 20, param1 = 100, 
+                   param2 = 30, minRadius = 13, maxRadius = 20) 
     if detected_circles is not None: 
         detected_circles = numpy.uint16(numpy.around(detected_circles)) 
       
@@ -216,7 +216,7 @@ while(True):
     
     
     findBase(image)
-    findLancador(image)
+    #findLancador(image)
     drawRoute(image)
     predictnextPos(image)
     result = hit()
